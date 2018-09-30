@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MTGRules.Pages.AboutPage"
+             xmlns:local="clr-namespace:MTGRules;assembly=MTGRules">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="Center"
+                    HorizontalOptions="Center">
+            <Label FontSize="50" XAlign="Center">
+                MTG Rules
+            </Label>
+            <Label XAlign="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{local:Translate version, Resources=About}" />
+                        <Span Text=": "/>
+                        <Span x:Name="versionLabel" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label />
+            <Label FontSize="25" XAlign="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{local:Translate madeByIvancea, Resources=About}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label />
+            <Label />
+            <Label Text="{local:Translate appInfo, Resources=About}" XAlign="Center" />
+            <Label />
+            <Label XAlign="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{local:Translate notOfficialApp, Resources=About}" />
+                        <Span Text=" Wizards of the Coast (https://magic.wizards.com)" FontAttributes="Bold" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label />
+            <Label Text="{local:Translate requestOrFeature, Resources=About}" XAlign="Center" />
+            <Button Text="ivancea96@outlook.com" Command="{Binding HyperlinkCommand}" CommandParameter="mailto://ivancea96@outlook.com" HorizontalOptions="Center" />
+            <Button Text="Twitter: ivancea96" Command="{Binding HyperlinkCommand}" CommandParameter="https://twitter.com/ivancea96" HorizontalOptions="Center" />
+            <Label />
+            <Button x:Name="backButton"
+                Text="{local:Translate backButton, Resources=About}"
+                Grid.Row="3"
+                Clicked="OnBackButtonClicked"
+                HorizontalOptions="Center"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

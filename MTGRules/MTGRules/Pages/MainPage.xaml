@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MTGRules.Pages.MainPage"
+             xmlns:local="clr-namespace:MTGRules;assembly=MTGRules"
+             Appearing="OnAppear"
+             Title="MTGRules">
+    <AbsoluteLayout>
+        <StackLayout
+            x:Name="content"
+            Orientation="Vertical"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <StackLayout
+                Orientation="Horizontal">
+                <Button x:Name="backButton" Clicked="OnBackButtonClicked" Text="&lt;" />
+                <Button Clicked="OnSearch" x:Name="searchButton" Text="{local:Translate searchButton}" />
+                <Entry x:Name="searchTextBox"
+                   Placeholder="{local:Translate searchTextBox}"
+                   Completed="OnTextBoxCompleted"
+                   HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+
+            <ListView x:Name="list"
+                      ItemTapped="OnListItemTapped"
+                      HasUnevenRows="True"
+                      CachingStrategy="RecycleElement"
+                      VerticalOptions="FillAndExpand">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Clicked="OnCopyToClipboard" CommandParameter="{Binding .}" Text="{local:Translate copyToClipboard}" />
+                                <MenuItem Clicked="OnReadText" CommandParameter="{Binding .}" Text="{local:Translate readText}" />
+                            </ViewCell.ContextActions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding Title}"
+                                       FontAttributes="Bold"
+                                       Margin="10"
+                                       Grid.Column="0"/>
+
+                                <Label FormattedText="{Binding Text, Converter={StaticResource ruleHyperlink}}"
+                                       Margin="10"
+                                       Grid.Column="1"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+        <ActivityIndicator x:Name="activityIndicator"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,0.2,0.2"
+            WidthRequest="100"
+            IsRunning="True"
+            IsVisible="True" />
+    </AbsoluteLayout>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="{local:Translate homeButton}" Icon="ic_home_white_18dp.png" Command="{Binding HomeCommand}" />
+        <ToolbarItem Order="Primary" Text="{local:Translate randomRuleButton}" Icon="ic_shuffle_white_18dp.png" Activated="OnRandomRuleButtonClick" />
+
+        <ToolbarItem Order="Secondary" Text="{local:Translate donateButton}" Activated="OnDonateButtonClick" />
+        <ToolbarItem Order="Secondary" Text="{local:Translate changeThemeButton}" Activated="OnChangeThemeButtonClick" />
+        <ToolbarItem Order="Secondary" Text="{local:Translate clearCacheButton}" Command="{Binding ClearCacheCommand}" />
+        <ToolbarItem Order="Secondary" Text="{local:Translate compareRulesButton}" Activated="OnExperimentalButtonClick" />
+        <ToolbarItem Order="Secondary" Text="{local:Translate changeRulesButton}" Activated="OnChangeRulesButtonClick" />
+        <ToolbarItem Order="Secondary" Text="{local:Translate aboutButton}" Activated="OnAboutButtonClick" />
+    </ContentPage.ToolbarItems>
+</ContentPage>
