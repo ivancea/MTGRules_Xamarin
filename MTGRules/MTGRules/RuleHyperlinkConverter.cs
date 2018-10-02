@@ -45,7 +45,7 @@ namespace MTGRules
                     Span hyperlinkSpan = new Span { Text = str[i] };
 
                     hyperlinkSpan.TextColor = Color.Accent;
-                    hyperlinkSpan.TextDecorations = TextDecorations.Underline;
+                    //hyperlinkSpan.TextDecorations = TextDecorations.Underline;
 
                     TapGestureRecognizer ruleTapGestureRecognizer = new TapGestureRecognizer();
 

@@ -11,8 +11,8 @@
             Orientation="Vertical"
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0,0,1,1">
-            <StackLayout
-                Orientation="Horizontal">
+
+            <StackLayout Orientation="Horizontal">
                 <Button x:Name="backButton" Clicked="OnBackButtonClicked" Text="&lt;" />
                 <Button Clicked="OnSearch" x:Name="searchButton" Text="{local:Translate searchButton}" />
                 <Entry x:Name="searchTextBox"
@@ -24,7 +24,6 @@
             <ListView x:Name="list"
                       ItemTapped="OnListItemTapped"
                       HasUnevenRows="True"
-                      CachingStrategy="RecycleElement"
                       VerticalOptions="FillAndExpand">
 
                 <ListView.ItemTemplate>
@@ -34,9 +33,10 @@
                                 <MenuItem Clicked="OnCopyToClipboard" CommandParameter="{Binding .}" Text="{local:Translate copyToClipboard}" />
                                 <MenuItem Clicked="OnReadText" CommandParameter="{Binding .}" Text="{local:Translate readText}" />
                             </ViewCell.ContextActions>
+
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
@@ -47,7 +47,7 @@
 
                                 <Label FormattedText="{Binding Text, Converter={StaticResource ruleHyperlink}}"
                                        Margin="10"
-                                       Grid.Column="1"/>
+                                       Grid.Column="1" />
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
@@ -65,7 +65,6 @@
         <ToolbarItem Order="Primary" Text="{local:Translate homeButton}" Icon="ic_home_white_18dp.png" Command="{Binding HomeCommand}" />
         <ToolbarItem Order="Primary" Text="{local:Translate randomRuleButton}" Icon="ic_shuffle_white_18dp.png" Activated="OnRandomRuleButtonClick" />
 
-        <ToolbarItem Order="Secondary" Text="{local:Translate donateButton}" Activated="OnDonateButtonClick" />
         <ToolbarItem Order="Secondary" Text="{local:Translate changeThemeButton}" Activated="OnChangeThemeButtonClick" />
         <ToolbarItem Order="Secondary" Text="{local:Translate clearCacheButton}" Command="{Binding ClearCacheCommand}" />
         <ToolbarItem Order="Secondary" Text="{local:Translate compareRulesButton}" Activated="OnExperimentalButtonClick" />
