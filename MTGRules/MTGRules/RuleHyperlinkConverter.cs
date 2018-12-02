@@ -47,10 +47,11 @@ namespace MTGRules
                     hyperlinkSpan.TextColor = Color.Accent;
                     //hyperlinkSpan.TextDecorations = TextDecorations.Underline;
 
-                    TapGestureRecognizer ruleTapGestureRecognizer = new TapGestureRecognizer();
-
-                    ruleTapGestureRecognizer.Command = ruleTapCommand;
-                    ruleTapGestureRecognizer.CommandParameter = hyperlinkSpan;
+                    TapGestureRecognizer ruleTapGestureRecognizer = new TapGestureRecognizer
+                    {
+                        Command = ruleTapCommand,
+                        CommandParameter = hyperlinkSpan
+                    };
 
                     hyperlinkSpan.GestureRecognizers.Add(ruleTapGestureRecognizer);
 
