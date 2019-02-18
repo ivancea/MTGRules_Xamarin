@@ -90,6 +90,11 @@ namespace MTGRules
             new RulesSource("MagicCompRules%2020181005.txt",
                             new Uri("http://media.wizards.com/2018/downloads/MagicCompRules%2020181005.txt"),
                             new DateTime(2018, 10, 5),
+                            Encoding.GetEncoding("windows-1252")),
+
+            new RulesSource("MagicCompRules%2020190125.txt",
+                            new Uri("http://media.wizards.com/2019/downloads/MagicCompRules%2020190125.txt"),
+                            new DateTime(2019, 1, 25),
                             Encoding.GetEncoding("windows-1252"))
         };
     }
