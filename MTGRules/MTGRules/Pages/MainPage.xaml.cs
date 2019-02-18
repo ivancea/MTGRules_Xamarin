@@ -353,11 +353,11 @@ namespace MTGRules.Pages
             LogEvent(EventType.TextToSpeech);
         }
 
-        private void OnCopyToClipboard(object sender, EventArgs args)
+        private async void OnCopyToClipboardAsync(object sender, EventArgs args)
         {
             Rule rule = (Rule)((MenuItem)sender).BindingContext;
 
-            Clipboard.SetText(rule.Title + ": " + rule.Text);
+            await Clipboard.SetTextAsync(rule.Title + ": " + rule.Text);
         }
 
         private void OnReadText(object sender, EventArgs args)

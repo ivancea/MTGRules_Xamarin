@@ -42,7 +42,7 @@ namespace MTGRules
                         string.Format("Key '{0}' was not found in resources '{1}'.", Key, Resources),
                         nameof(Key));
 #else
-                translation = Text;
+                    translation = Key;
 #endif
                 }
 
@@ -55,7 +55,7 @@ namespace MTGRules
                     string.Format("Resources '{0}' was not found in resource managers.", Resources),
                     nameof(Resources));
 #else
-                return Text;
+                return Key;
 #endif
             }
         }

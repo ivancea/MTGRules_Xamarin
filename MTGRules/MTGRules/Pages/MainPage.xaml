@@ -24,13 +24,14 @@
             <ListView x:Name="list"
                       ItemTapped="OnListItemTapped"
                       HasUnevenRows="True"
-                      VerticalOptions="FillAndExpand">
+                      VerticalOptions="FillAndExpand"
+                      CachingStrategy="RecycleElement">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.ContextActions>
-                                <MenuItem Clicked="OnCopyToClipboard" CommandParameter="{Binding .}" Text="{local:Translate copyToClipboard}" />
+                                <MenuItem Clicked="OnCopyToClipboardAsync" CommandParameter="{Binding .}" Text="{local:Translate copyToClipboard}" />
                                 <MenuItem Clicked="OnReadText" CommandParameter="{Binding .}" Text="{local:Translate readText}" />
                             </ViewCell.ContextActions>
 
