@@ -21,21 +21,31 @@ namespace MTGRules
             this.Text = text;
         }
 
-        public static async Task<List<Rule>> getRules(RulesSource source)
+        public static async Task<List<Rule>> GetRules(RulesSource source)
         {
-            string text = await loadRules(source);
+            string text = await LoadRules(source);
             if (text == null)
                 return null;
-            return textToRules(text);
+            return TextToRules(text);
         }
 
-        private static List<Rule> textToRules(string text)
+        private static string SanitizeRules(string rules)
+        {
+            return rules
+                .Replace('“', '"')
+                .Replace('”', '"')
+                .Replace('’', '\'')
+                .Replace('—', '-')
+                .Replace('–', '-');
+        }
+
+        private static List<Rule> TextToRules(string text)
         {
             List<Rule> rules = new List<Rule>();
 
             try
             {
-                using (StringReader body = new StringReader(text))
+                using (StringReader body = new StringReader(SanitizeRules(text)))
                 {
 
                     string t;
@@ -144,7 +154,7 @@ namespace MTGRules
             return rules;
         }
 
-        private static async Task<string> loadRules(RulesSource source)
+        private static async Task<string> LoadRules(RulesSource source)
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), source.FileName);
 

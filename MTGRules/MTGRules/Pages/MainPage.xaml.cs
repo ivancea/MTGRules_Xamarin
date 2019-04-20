@@ -2,10 +2,9 @@
 using MTGRules.Resources;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -13,7 +12,6 @@ using Xamarin.Forms.Xaml;
 
 namespace MTGRules.Pages
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
         private class ActivityIndicatorViewer : IDisposable
@@ -183,6 +181,11 @@ namespace MTGRules.Pages
             }
         }
 
+        private void OnTextBoxTextChanged(object sender, EventArgs args)
+        {
+            searchButton.IsEnabled = searchTextBox.Text != null && searchTextBox.Text.Length > 0;
+        }
+
         private void OnTextBoxCompleted(object sender, EventArgs args)
         {
             Focus();
@@ -314,11 +317,19 @@ namespace MTGRules.Pages
                 return new Rule("(+) " + to.Title, to.Text);
             if (from.Title != to.Title)
                 return null;
-            if (from.Text != to.Text)
+
+            if (GetRuleWithoutNumbers(from.Text) != GetRuleWithoutNumbers(to.Text))
                 return new Rule("(M) " + from.Title, from.Text + "\n\n " +
                                                      MainResources.compareChangedTo +
                                                      " \n\n" + to.Text);
             return null;
+        }
+
+        private static readonly Regex regex = new Regex(@"(\d{3}(?:\.\d+(?:[a-z](?:-[a-z]))?)?)", RegexOptions.IgnoreCase);
+
+        private static string GetRuleWithoutNumbers(string rule)
+        {
+            return regex.Replace(rule, "@");
         }
 
         private static Rule FindRule(List<Rule> rules, string title)
@@ -518,15 +529,10 @@ namespace MTGRules.Pages
             }
         }
 
-        private async void Search(string text, bool addToHistory = true)
+        private void Search(string text, bool addToHistory = true)
         {
-            if (actualRules == null)
+            if (actualRules == null || text == null)
                 return;
-            if (text == null || text.Length < 3)
-            {
-                await DisplayAlert(MainResources.error, MainResources.searchTerm3Characters, MainResources.ok);
-                return;
-            }
 
             using (ActivityIndicatorViewer.Show())
             {
@@ -640,7 +646,7 @@ namespace MTGRules.Pages
 
         private async Task<List<Rule>> GetRulesAsync(RulesSource rulesSource)
         {
-            List<Rule> rules = await Rule.getRules(rulesSource);
+            List<Rule> rules = await Rule.GetRules(rulesSource);
 
             if(rules != null)
             {

@@ -129,6 +129,9 @@
   <data name="notOfficialApp" xml:space="preserve">
     <value>This is NOT an official App and it is NOT affiliated with</value>
   </data>
+  <data name="portApp" xml:space="preserve">
+    <value>This App is a port of MTG Rules, from the Windows Store. It is not fully ported yet</value>
+  </data>
   <data name="requestOrFeature" xml:space="preserve">
     <value>Any request or feature?</value>
   </data>

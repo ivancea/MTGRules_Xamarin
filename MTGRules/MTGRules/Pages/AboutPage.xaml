@@ -39,6 +39,14 @@
                 </Label.FormattedText>
             </Label>
             <Label />
+            <Label XAlign="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{local:Translate portApp, Resources=About}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label />
             <Label Text="{local:Translate requestOrFeature, Resources=About}" XAlign="Center" />
             <Button Text="ivancea96@outlook.com" Command="{Binding HyperlinkCommand}" CommandParameter="mailto://ivancea96@outlook.com" HorizontalOptions="Center" />
             <Button Text="Twitter: ivancea96" Command="{Binding HyperlinkCommand}" CommandParameter="https://twitter.com/ivancea96" HorizontalOptions="Center" />

@@ -13,19 +13,19 @@
             AbsoluteLayout.LayoutBounds="0,0,1,1">
 
             <StackLayout Orientation="Horizontal">
-                <Button x:Name="backButton" Clicked="OnBackButtonClicked" Text="&lt;" />
-                <Button Clicked="OnSearch" x:Name="searchButton" Text="{local:Translate searchButton}" />
+                <Button x:Name="backButton" Clicked="OnBackButtonClicked" IsEnabled="False" Text="&lt;" />
+                <Button Clicked="OnSearch" x:Name="searchButton" IsEnabled="False" Text="{local:Translate searchButton}" />
                 <Entry x:Name="searchTextBox"
                    Placeholder="{local:Translate searchTextBox}"
                    Completed="OnTextBoxCompleted"
-                   HorizontalOptions="FillAndExpand"/>
+                   HorizontalOptions="FillAndExpand"
+                   TextChanged="OnTextBoxTextChanged"/>
             </StackLayout>
 
             <ListView x:Name="list"
                       ItemTapped="OnListItemTapped"
                       HasUnevenRows="True"
-                      VerticalOptions="FillAndExpand"
-                      CachingStrategy="RecycleElement">
+                      VerticalOptions="FillAndExpand">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -35,7 +35,9 @@
                                 <MenuItem Clicked="OnReadText" CommandParameter="{Binding .}" Text="{local:Translate readText}" />
                             </ViewCell.ContextActions>
 
-                            <Grid>
+                            <Grid Padding="10"
+                                  ColumnSpacing="20"
+                                  RowSpacing="20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
@@ -43,11 +45,9 @@
 
                                 <Label Text="{Binding Title}"
                                        FontAttributes="Bold"
-                                       Margin="10"
                                        Grid.Column="0"/>
 
                                 <Label FormattedText="{Binding Text, Converter={StaticResource ruleHyperlink}}"
-                                       Margin="10"
                                        Grid.Column="1" />
                             </Grid>
                         </ViewCell>
