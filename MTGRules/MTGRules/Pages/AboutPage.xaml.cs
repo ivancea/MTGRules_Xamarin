@@ -1,6 +1,7 @@
 ﻿using MTGRules.Interfaces;
 using System;
 using System.Diagnostics;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,7 +20,7 @@ namespace MTGRules.Pages
 
             HyperlinkCommand = new Command<string>(uri =>
             {
-                Device.OpenUri(new Uri(uri));
+                Launcher.OpenAsync(uri);
             });
 
             BindingContext = this;
