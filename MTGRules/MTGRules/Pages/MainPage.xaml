@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MTGRules.Pages.MainPage"
              xmlns:local="clr-namespace:MTGRules;assembly=MTGRules"
-             Appearing="OnAppear"
+             Appearing="OnAppearing"
              Title="MTGRules">
     <AbsoluteLayout>
         <StackLayout
@@ -22,38 +22,51 @@
                    TextChanged="OnTextBoxTextChanged"/>
             </StackLayout>
 
-            <ListView x:Name="list"
-                      ItemTapped="OnListItemTapped"
-                      HasUnevenRows="True"
-                      VerticalOptions="FillAndExpand">
+            <CollectionView
+                x:Name="list"
+                VerticalOptions="FillAndExpand"
+                ItemsSource="{Binding visibleRules}"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding ListItemTapped}">
 
-                <ListView.ItemTemplate>
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <ViewCell.ContextActions>
+                        <!--<ViewCell.ContextActions>
                                 <MenuItem Clicked="OnCopyToClipboardAsync" CommandParameter="{Binding .}" Text="{local:Translate copyToClipboard}" />
                                 <MenuItem Clicked="OnReadText" CommandParameter="{Binding .}" Text="{local:Translate readText}" />
-                            </ViewCell.ContextActions>
-
+                            </ViewCell.ContextActions>-->
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="{local:Translate copyToClipboard}"
+                                        BackgroundColor="LightGreen"
+                                        Command="{Binding OnCopyToClipboardAsync}"
+                                        CommandParameter="{Binding}" />
+                                    <SwipeItem Text="{local:Translate readText}"
+                                        BackgroundColor="LightPink"
+                                        Command="{Binding OnReadText}"
+                                        CommandParameter="{Binding}"/>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
                             <Grid Padding="10"
-                                  ColumnSpacing="20"
-                                  RowSpacing="20">
+                                ColumnSpacing="20"
+                                RowSpacing="20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
                                 <Label Text="{Binding Title}"
-                                       FontAttributes="Bold"
-                                       Grid.Column="0"/>
+                                           FontAttributes="Bold"
+                                           Grid.Column="0"/>
 
                                 <Label FormattedText="{Binding Text, Converter={StaticResource ruleHyperlink}}"
-                                       Grid.Column="1" />
+                                           Grid.Column="1" />
                             </Grid>
-                        </ViewCell>
+                        </SwipeView>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
         <ActivityIndicator x:Name="activityIndicator"
             AbsoluteLayout.LayoutFlags="All"

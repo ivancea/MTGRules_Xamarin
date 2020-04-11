@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using Windows.Media.SpeechSynthesis;
-using Windows.UI.Xaml.Controls;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(MTGRules.UWP.TextToSpeech))]
@@ -10,7 +9,7 @@ namespace MTGRules.UWP
 {
     public class TextToSpeech : ITextToSpeech
     {
-        private static MediaElement mediaElement = new MediaElement();
+        private static Windows.UI.Xaml.Controls.MediaElement mediaElement = new Windows.UI.Xaml.Controls.MediaElement();
 
         public async void Speak(string text)
         {

@@ -23,6 +23,7 @@ namespace MTGRules.Droid
 
             MainActivity.Instance = this;
 
+            global::Xamarin.Forms.Forms.SetFlags("SwipeView_Experimental");
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
         }

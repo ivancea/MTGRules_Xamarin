@@ -2,10 +2,12 @@
 using MTGRules.Resources;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -50,6 +52,8 @@ namespace MTGRules.Pages
         public static MainPage ActualInstance;
 
         private List<Rule> actualRules;
+
+        private ObservableCollection<Rule> visibleRules = new ObservableCollection<Rule>();
 
         private readonly List<HistoryItem> history = new List<HistoryItem>();
         private HistoryItem actualHistoryItem;
@@ -97,7 +101,7 @@ namespace MTGRules.Pages
             BindingContext = this;
         }
 
-        private async void OnAppear(object sender, EventArgs e)
+        private async void OnAppearing(object sender, EventArgs e)
         {
             ActivityIndicatorViewer.page = this;
 
@@ -111,6 +115,8 @@ namespace MTGRules.Pages
                     }
                 }
             }
+
+            list.ItemsSource = visibleRules;
         }
 
         private void LogEvent(EventType eventType)
@@ -157,11 +163,11 @@ namespace MTGRules.Pages
             PopHistoryItem();
         }
 
-        private void OnListItemTapped(object sender, ItemTappedEventArgs args)
+        public ICommand ListItemTapped => new Command<object>(selectionChangedCommandParameter =>
         {
-            Rule rule = (Rule) args.Item;
+            Rule rule = (Rule)list.SelectedItem;
 
-            if (rule.Title.Length > 0)
+            if (rule != null && rule.Title.Length > 0)
             {
                 if (rule.Title[0] >= '1' && rule.Title[0] <= '9')
                 {
@@ -179,7 +185,7 @@ namespace MTGRules.Pages
                     ShowByNumber(10);
                 }
             }
-        }
+        });
 
         private void OnTextBoxTextChanged(object sender, EventArgs args)
         {
@@ -293,7 +299,9 @@ namespace MTGRules.Pages
                     }
                 }
 
-                list.ItemsSource = li;
+                visibleRules.Clear();
+                li.ForEach(visibleRules.Add);
+
 
                 PushHistoryItem(null);
 
@@ -364,17 +372,13 @@ namespace MTGRules.Pages
             LogEvent(EventType.TextToSpeech);
         }
 
-        private async void OnCopyToClipboardAsync(object sender, EventArgs args)
+        public ICommand OnCopyToClipboardAsync => new Command<Rule>(async rule =>
         {
-            Rule rule = (Rule)((MenuItem)sender).BindingContext;
-
             await Clipboard.SetTextAsync(rule.Title + ": " + rule.Text);
-        }
+        });
 
-        private void OnReadText(object sender, EventArgs args)
+        public ICommand OnReadText => new Command<Rule>(rule =>
         {
-            Rule rule = (Rule)((MenuItem)sender).BindingContext;
-
             string text = rule.Text;
 
             if (text.Length > 0)
@@ -386,7 +390,7 @@ namespace MTGRules.Pages
 
                 SpeechText(text);
             }
-        }
+        });
 
         private void ShowRandomRule(int? seed = null, bool addToHistory = true)
         {
@@ -409,7 +413,8 @@ namespace MTGRules.Pages
                 PushHistoryItem(new HistoryItem(HistoryType.Random, seed));
             }
 
-            list.ItemsSource = li;
+            visibleRules.Clear();
+            li.ForEach(visibleRules.Add);
 
             LogEvent(EventType.RandomRule);
         }
@@ -451,12 +456,14 @@ namespace MTGRules.Pages
                     }
                 }
 
-                list.ItemsSource = source;
+                visibleRules.Clear();
+                source.ForEach(visibleRules.Add);
+
                 if (mustSee != null)
                 {
                     //list.ScrollIntoView(mustSee, ScrollIntoViewAlignment.Leading);
                     list.SelectedItem = mustSee;
-                    list.ScrollTo(mustSee, ScrollToPosition.Center, true);
+                    list.ScrollTo(mustSee, position: ScrollToPosition.Center, animate: true);
                     //list.UpdateLayout();
                 }
 
@@ -524,8 +531,9 @@ namespace MTGRules.Pages
                 {
                     PushHistoryItem(new HistoryItem(HistoryType.Number, number));
                 }
-                
-                list.ItemsSource = source;
+
+                visibleRules.Clear();
+                source.ForEach(visibleRules.Add);
             }
         }
 
@@ -563,7 +571,8 @@ namespace MTGRules.Pages
                     PushHistoryItem(new HistoryItem(HistoryType.Search, text));
                 }
 
-                list.ItemsSource = source;
+                visibleRules.Clear();
+                source.ForEach(visibleRules.Add);
 
                 LogEvent(EventType.SearchText);
             }
