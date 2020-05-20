@@ -306,6 +306,11 @@ namespace MTGRules.Pages
             string selectedRules = await DisplayActionSheet(title, MainResources.cancel, null,
                 RulesVersionsService.RulesSources.Select(e => e.Date.ToShortDateString()).Reverse().ToArray());
 
+            if (selectedRules == null)
+            {
+                return -1;
+            }
+
             return RulesVersionsService.RulesSources.FindIndex(r => selectedRules.StartsWith(r.Date.ToShortDateString()));
         }
 
