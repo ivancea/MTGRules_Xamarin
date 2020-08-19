@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MTGRules
 {
-    class Rule
+    public class Rule
     {
         public string Title { get; set; }
         public string Text { get; set; }

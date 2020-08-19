@@ -70,6 +70,9 @@ namespace MTGRules.Pages
         {
             InitializeComponent();
 
+            ActualInstance = this;
+            BindingContext = this;
+
             /*useLightTheme = (bool)Application.Current.Properties["useLightTheme"];
             if (useLightTheme)
             {
@@ -95,10 +98,6 @@ namespace MTGRules.Pages
             }, () => {
                 return existsCache;
             });
-
-            ActualInstance = this;
-
-            BindingContext = this;
         }
 
         private async void OnAppearing(object sender, EventArgs e)
@@ -685,7 +684,6 @@ namespace MTGRules.Pages
             actualRules = tempRules;
             //actualRulesTextBlock.Text = source.Date.ToString("dd/MM/yyyy") + 
             //                            (rulesIndex == RulesVersionsService.RulesSources.Count - 1 ? " (" + MainResources.newest + ")" : "");
-            actualRulesIndex = rulesIndex;
 
             ClearHistory();
             ShowByNumber(0);

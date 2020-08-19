@@ -25,7 +25,7 @@
             <CollectionView
                 x:Name="list"
                 VerticalOptions="FillAndExpand"
-                ItemsSource="{Binding visibleRules}"
+                ItemsSource="{Binding VisibleRules}"
                 SelectionMode="Single"
                 SelectionChangedCommand="{Binding ListItemTapped}">
 
