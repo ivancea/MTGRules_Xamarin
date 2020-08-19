@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MTGRules.Pages.MainPage"
              xmlns:local="clr-namespace:MTGRules;assembly=MTGRules"
-             Appearing="OnAppearing"
-             Title="MTGRules">
+             Title="MTGRules"
+             x:Name="mainPage">
     <AbsoluteLayout>
         <StackLayout
             x:Name="content"
@@ -21,13 +21,12 @@
                    HorizontalOptions="FillAndExpand"
                    TextChanged="OnTextBoxTextChanged"/>
             </StackLayout>
-
             <CollectionView
                 x:Name="list"
                 VerticalOptions="FillAndExpand"
                 ItemsSource="{Binding VisibleRules}"
                 SelectionMode="Single"
-                SelectionChangedCommand="{Binding ListItemTapped}">
+                SelectionChangedCommand="{Binding OnListItemTapped}">
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -40,14 +39,18 @@
                                 <SwipeItems>
                                     <SwipeItem Text="{local:Translate copyToClipboard}"
                                         BackgroundColor="LightGreen"
-                                        Command="{Binding OnCopyToClipboardAsync}"
+                                        Command="{Binding BindingContext.OnCopyToClipboardAsync, Source={x:Reference mainPage}}"
                                         CommandParameter="{Binding}" />
-                                    <SwipeItem Text="{local:Translate readText}"
-                                        BackgroundColor="LightPink"
-                                        Command="{Binding OnReadText}"
-                                        CommandParameter="{Binding}"/>
                                 </SwipeItems>
                             </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="{local:Translate readText}"
+                                        BackgroundColor="LightPink"
+                                        Command="{Binding BindingContext.OnReadText, Source={x:Reference mainPage}}"
+                                        CommandParameter="{Binding}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
                             <Grid Padding="10"
                                 ColumnSpacing="20"
                                 RowSpacing="20">
@@ -73,7 +76,7 @@
             AbsoluteLayout.LayoutBounds="0.5,0.5,0.2,0.2"
             WidthRequest="100"
             IsRunning="True"
-            IsVisible="True" />
+            IsVisible="False"/>
     </AbsoluteLayout>
     <ContentPage.ToolbarItems>
         <ToolbarItem Order="Primary" Text="{local:Translate homeButton}" Icon="ic_home_white_18dp.png" Command="{Binding HomeCommand}" />

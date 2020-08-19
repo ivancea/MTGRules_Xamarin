@@ -3,6 +3,7 @@ using MTGRules.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -14,7 +15,7 @@ using Xamarin.Forms.Xaml;
 
 namespace MTGRules.Pages
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         private class ActivityIndicatorViewer : IDisposable
         {
@@ -53,7 +54,7 @@ namespace MTGRules.Pages
 
         private List<Rule> actualRules;
 
-        private ObservableCollection<Rule> visibleRules = new ObservableCollection<Rule>();
+        public ObservableCollection<Rule> VisibleRules { get; } = new ObservableCollection<Rule>();
 
         private readonly List<HistoryItem> history = new List<HistoryItem>();
         private HistoryItem actualHistoryItem;
@@ -61,17 +62,32 @@ namespace MTGRules.Pages
         private bool useLightTheme;
         private int actualRulesIndex;
 
-        public Command HomeCommand { get; private set; }
-        public Command ClearCacheCommand { get; private set; }
+        public Command HomeCommand => new Command(() => {
+            ShowByNumber();
+        }, () => {
+            return history.Count >= 1 && (actualHistoryItem == null || !actualHistoryItem.Type.Equals(HistoryType.Number) || !actualHistoryItem.Value.Equals(0));
+        });
+
+        public Command ClearCacheCommand => new Command(() =>
+        {
+            ClearCache();
+
+            existsCache = false;
+
+            ClearCacheCommand.ChangeCanExecute();
+        }, () =>
+        {
+            return existsCache;
+        });
 
         private bool existsCache = true;
 
         public MainPage()
         {
-            InitializeComponent();
-
             ActualInstance = this;
             BindingContext = this;
+
+            ActivityIndicatorViewer.page = this;
 
             /*useLightTheme = (bool)Application.Current.Properties["useLightTheme"];
             if (useLightTheme)
@@ -83,39 +99,18 @@ namespace MTGRules.Pages
                 changeThemeButton.Label = MainResources.useLightTheme;
             }*/
 
-            HomeCommand = new Command(() => {
-                ShowByNumber();
-            }, () => {
-                return history.Count >= 1 && (actualHistoryItem == null || !actualHistoryItem.Type.Equals(HistoryType.Number) || !actualHistoryItem.Value.Equals(0));
-            });
-
-            ClearCacheCommand = new Command(() => {
-                ClearCache();
-
-                existsCache = false;
-
-                ClearCacheCommand.ChangeCanExecute();
-            }, () => {
-                return existsCache;
-            });
+            InitializeComponent();
         }
 
-        private async void OnAppearing(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            ActivityIndicatorViewer.page = this;
-
             if (actualRules == null)
             {
-                using (ActivityIndicatorViewer.Show())
+                if (!await LoadDataAsync(RulesVersionsService.RulesSources.Count - 1))
                 {
-                    if (!await LoadDataAsync(RulesVersionsService.RulesSources.Count - 1))
-                    {
-                        await DisplayAlert(MainResources.error, MainResources.errorLoadingLastRules, MainResources.ok);// MainResources.errorLoadingLastRules);
-                    }
+                    await DisplayAlert(MainResources.error, MainResources.errorLoadingLastRules, MainResources.ok);
                 }
             }
-
-            list.ItemsSource = visibleRules;
         }
 
         private void LogEvent(EventType eventType)
@@ -162,7 +157,7 @@ namespace MTGRules.Pages
             PopHistoryItem();
         }
 
-        public ICommand ListItemTapped => new Command<object>(selectionChangedCommandParameter =>
+        public ICommand OnListItemTapped => new Command<object>(selectionChangedCommandParameter =>
         {
             Rule rule = (Rule)list.SelectedItem;
 
@@ -298,8 +293,8 @@ namespace MTGRules.Pages
                     }
                 }
 
-                visibleRules.Clear();
-                li.ForEach(visibleRules.Add);
+                VisibleRules.Clear();
+                li.ForEach(VisibleRules.Add);
 
 
                 PushHistoryItem(null);
@@ -417,8 +412,8 @@ namespace MTGRules.Pages
                 PushHistoryItem(new HistoryItem(HistoryType.Random, seed));
             }
 
-            visibleRules.Clear();
-            li.ForEach(visibleRules.Add);
+            VisibleRules.Clear();
+            li.ForEach(VisibleRules.Add);
 
             LogEvent(EventType.RandomRule);
         }
@@ -460,8 +455,8 @@ namespace MTGRules.Pages
                     }
                 }
 
-                visibleRules.Clear();
-                source.ForEach(visibleRules.Add);
+                VisibleRules.Clear();
+                source.ForEach(VisibleRules.Add);
 
                 if (mustSee != null)
                 {
@@ -536,8 +531,8 @@ namespace MTGRules.Pages
                     PushHistoryItem(new HistoryItem(HistoryType.Number, number));
                 }
 
-                visibleRules.Clear();
-                source.ForEach(visibleRules.Add);
+                VisibleRules.Clear();
+                source.ForEach(VisibleRules.Add);
             }
         }
 
@@ -575,8 +570,8 @@ namespace MTGRules.Pages
                     PushHistoryItem(new HistoryItem(HistoryType.Search, text));
                 }
 
-                visibleRules.Clear();
-                source.ForEach(visibleRules.Add);
+                VisibleRules.Clear();
+                source.ForEach(VisibleRules.Add);
 
                 LogEvent(EventType.SearchText);
             }

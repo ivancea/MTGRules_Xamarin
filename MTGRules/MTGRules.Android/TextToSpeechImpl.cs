@@ -1,6 +1,7 @@
 ﻿using Android.Speech.Tts;
 using Java.Util;
 using MTGRules.Interfaces;
+using System;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(MTGRules.Droid.TextToSpeechImpl))]
