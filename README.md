@@ -1,7 +1,9 @@
 # MTGRules
 MTGRules Xamarin App 
 
-*This project replaced https://github.com/ivancea/MTGRules_UWP, a UWP solution.*
+**This project has been discontinued and has been replaced by https://github.com/ivancea/MTGRules_Android/, an Android version**
+
+*This project replaced https://github.com/ivancea/MTGRules_UWP, a UWP version.*
 
 The main objective of this application is to provide a history of **Magic: The Gathering** rule sets, and the ability to compare, search and navigate them.
 
