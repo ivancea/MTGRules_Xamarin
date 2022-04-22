@@ -1,4 +1,4 @@
-# MTGRules
+# MTGRules Xamarin
 MTGRules Xamarin App 
 
 **This project has been discontinued and has been replaced by https://github.com/ivancea/MTGRules_Android/, an Android version**
